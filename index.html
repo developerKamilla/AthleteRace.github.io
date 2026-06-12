@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Athlete Race — Elite Training Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain"></div>
+  <div id="toast"></div>
+
+  <section id="auth-screen" class="auth-shell">
+    <div class="auth-orb orb-a"></div>
+    <div class="auth-orb orb-b"></div>
+    <div class="auth-topbar">
+      <div class="brand-mark">AR</div>
+      <div class="brand-copy">Elite training community</div>
+    </div>
+
+    <div class="auth-hero reveal-in">
+      <p class="eyebrow">Athlete Race Club</p>
+      <h1>TRAIN<br><span>LIKE ELITE</span></h1>
+      <p class="auth-subtitle">Расписание, чат, события и тренерская книжка в одном премиальном приложении.</p>
+      <div class="auth-metrics">
+        <div><strong>06</strong><span>мест в группе</span></div>
+        <div><strong>2</strong><span>тренера</span></div>
+        <div><strong>24/7</strong><span>чат клуба</span></div>
+      </div>
+    </div>
+
+    <div class="auth-card glass-card reveal-in delay-1">
+      <div class="card-kicker">Welcome back</div>
+      <h2>Вход в клуб</h2>
+      <button class="auth-btn dark" onclick="loginWith('google')">Google</button>
+      <button class="auth-btn dark" onclick="loginWith('apple')">Apple</button>
+      <button class="auth-btn dark" onclick="loginWith('yandex')">Яндекс</button>
+      <div class="divider"><span>или</span></div>
+      <button class="auth-btn primary" onclick="showEmailForm()">Войти по Email</button>
+      <button class="auth-btn subtle" onclick="showGuestForm()">Продолжить как гость</button>
+      <div class="coach-login">
+        <p>Вход для тренеров</p>
+        <div class="coach-login-grid">
+          <button onclick="loginAsCoach('vova')">Вова</button>
+          <button onclick="loginAsCoach('katya')">Катя</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="email-form" class="overlay">
+    <div class="modal glass-card">
+      <button class="modal-x" onclick="closeModal('email-form')">×</button>
+      <p class="eyebrow">Member access</p>
+      <h3>Войти по Email</h3>
+      <label>Никнейм<input id="email-nick" type="text" placeholder="Например, Kamilla" /></label>
+      <label>Email<input id="email-input" type="email" placeholder="you@example.com" /></label>
+      <div class="avatar-grid" id="email-avatar-grid"></div>
+      <button class="btn-primary" onclick="loginWithEmail()">Войти</button>
+    </div>
+  </div>
+
+  <div id="guest-form" class="overlay">
+    <div class="modal glass-card">
+      <button class="modal-x" onclick="closeModal('guest-form')">×</button>
+      <p class="eyebrow">Guest pass</p>
+      <h3>Гостевой вход</h3>
+      <label>Никнейм<input id="guest-nick" type="text" placeholder="Ваш никнейм" /></label>
+      <div class="avatar-grid" id="guest-avatar-grid"></div>
+      <button class="btn-primary" onclick="loginAsGuest()">Продолжить</button>
+    </div>
+  </div>
+
+  <div id="avatar-picker-form" class="overlay">
+    <div class="modal glass-card wide-modal">
+      <button class="modal-x" onclick="closeModal('avatar-picker-form')">×</button>
+      <p class="eyebrow">Profile avatar</p>
+      <h3>Выберите аватар</h3>
+      <div class="avatar-grid avatar-grid-large" id="profile-avatar-grid"></div>
+      <button class="btn-primary" onclick="saveProfileAvatar()">Сохранить аватар</button>
+    </div>
+  </div>
+
+  <div id="workout-style-form" class="overlay">
+    <div class="modal glass-card wide-modal">
+      <button class="modal-x" onclick="closeModal('workout-style-form')">×</button>
+      <p class="eyebrow">Workout style</p>
+      <h3>Стиль тренировки</h3>
+      <div id="workout-style-grid" class="style-grid"></div>
+      <button class="btn-primary" onclick="saveWorkoutStyle()">Применить стиль</button>
+    </div>
+  </div>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <div class="brand-mark">AR</div>
+        <button class="icon-btn" onclick="logout()" title="Выйти">↗</button>
+      </div>
+      <div class="user-mini" id="user-mini"></div>
+      <nav id="side-nav" class="side-nav"></nav>
+      <div class="sidebar-foot">
+        <span>WORLD CLASS INSPIRED</span>
+        <strong>MOSCOW · 2026</strong>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <div class="mobile-header">
+        <button class="brand-mark mobile-menu-trigger" onclick="toggleMobileMenu()" aria-label="Открыть меню">AR</button>
+        <div id="mobile-title">Athlete Race</div>
+        <button class="icon-btn" onclick="logout()">↗</button>
+      </div>
+
+      <div id="mobile-menu-overlay" class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+      <aside id="mobile-menu" class="mobile-menu-panel">
+        <div class="sidebar-head">
+          <button class="brand-mark mobile-menu-trigger" onclick="closeMobileMenu()" aria-label="Закрыть меню">AR</button>
+          <button class="icon-btn" onclick="logout()" title="Выйти">↗</button>
+        </div>
+        <div class="user-mini" id="mobile-user-mini"></div>
+        <nav id="mobile-drawer-nav" class="side-nav"></nav>
+        <div class="sidebar-foot">
+          <span>WORLD CLASS INSPIRED</span>
+          <strong>MOSCOW · 2026</strong>
+        </div>
+      </aside>
+      <section id="page-schedule" class="page"></section>
+      <section id="page-chat" class="page hidden"></section>
+      <section id="page-leaderboard" class="page hidden"></section>
+      <section id="page-events" class="page hidden"></section>
+      <section id="page-profile" class="page hidden"></section>
+      <section id="page-coach" class="page hidden"></section>
+      <section id="page-book" class="page hidden"></section>
+    </main>
+    <nav id="mobile-bottom-nav" class="mobile-bottom-nav"></nav>
+  </div>
+
+  <script src="animations.js"></script>
+  <script>
+    const AVATAR_NUMS = Array.from({length:20},(_,i)=>i+1);
+    const STORAGE_KEY = 'ar_elite_state_v4';
+
+    const WORKOUT_STYLES = [
+      { id:'hyrox_beginner', title:'HYROX Beginner', level:'beginner', tag:'Beginner', focus:'База HYROX: техника, легкий бег, первые functional stations', accent:'Beginner', exercises:[
+        {name:'Easy run', detail:'1 км в спокойном темпе'}, {name:'Farmers carry', detail:'2×25 м'}, {name:'Sandbag lunges', detail:'2×20 м'}, {name:'Row', detail:'500 м'}
+      ]},
+      { id:'hyrox_intermediate', title:'HYROX Intermediate', level:'intermediate', tag:'Intermediate', focus:'Средняя интенсивность: бег + силовые станции', accent:'Engine', exercises:[
+        {name:'Run intervals', detail:'4×500 м'}, {name:'Sled push', detail:'25 м'}, {name:'Sled pull', detail:'25 м'}, {name:'Wall balls', detail:'60 повторений'}
+      ]},
+      { id:'hyrox_advanced', title:'HYROX Advanced', level:'advanced', tag:'Advanced', focus:'Продвинутый HYROX: тяжелые веса и высокий темп', accent:'Advanced', exercises:[
+        {name:'Tempo run', detail:'1 км быстрый темп'}, {name:'Heavy sled push', detail:'25 м'}, {name:'SkiErg', detail:'1000 м'}, {name:'Burpee broad jump', detail:'80 м'}
+      ]},
+      { id:'race_simulation', title:'Race Simulation', level:'race', tag:'Race', focus:'Симуляция гонки: станции подряд в соревновательном формате', accent:'Race', exercises:[
+        {name:'SkiErg', detail:'1000 м'}, {name:'Sled push', detail:'50 м'}, {name:'Row', detail:'1000 м'}, {name:'Farmers carry', detail:'200 м'}, {name:'Wall balls', detail:'75 повторений'}
+      ]},
+      { id:'sprint_conditioning', title:'Sprint Conditioning', level:'sprint', tag:'Sprint', focus:'Короткая интенсивная тренировка на скорость и выносливость', accent:'Sprint', exercises:[
+        {name:'Sprint', detail:'8×100 м'}, {name:'Burpees', detail:'3×15'}, {name:'Battle ropes', detail:'4×30 сек'}, {name:'Finisher run', detail:'400 м'}
+      ]}
+    ];
+
+    const DEFAULT_EXERCISES = [
+      { name: 'Farmers carry', weight: 10, unit: 'kg' },
+      { name: 'Sled push', weight: 60, unit: 'kg' },
+      { name: 'Sled pull', weight: 45, unit: 'kg' },
+      { name: 'Sandbag lunges', weight: 12, unit: 'kg' },
+      { name: 'Wall balls', weight: 6, unit: 'kg' },
+      { name: 'Kettlebell swing', weight: 12, unit: 'kg' }
+    ];
+
+    const EVENTS = [
+      { id:'e1', title:'HYROX Moscow', type:'Race', date:'2026-09-12', place:'Moscow Expo', desc:'Командная фитнес-гонка с бегом и функциональными станциями.', participants:[] },
+      { id:'e2', title:'World Class Outdoor', type:'Outdoor', date:'2026-07-20', place:'Luzhniki', desc:'Летняя тренировка и easy run на закате.', participants:[] },
+      { id:'e3', title:'Elite Conditioning Day', type:'Club event', date:'2026-08-04', place:'Athlete Race Studio', desc:'Тест выносливости, силовые станции и командный challenge.', participants:[] }
+    ];
+
+    let state = loadState();
+    let tempAvatar = 1;
+    let tempWorkoutSessionId = null;
+    let tempWorkoutStyleId = null;
+
+    function defaultState(){
+      return { currentUserId:null, currentPage:'schedule', selectedDay: toDateStr(new Date()), users:[], sessions: generateSessions(), events: EVENTS, chat: seedChat(), athleteBook:{} };
+    }
+
+    function seedChat(){
+      return [
+        {id: uid('m'), userName:'Тренер Катя', role:'coach', text:'Добро пожаловать в чат клуба. Пишите сюда вопросы по тренировкам и весам.', time: new Date(Date.now()-3600000).toISOString()},
+        {id: uid('m'), userName:'Тренер Вова', role:'coach', text:'Перед занятием отмечайте, если есть ограничения по нагрузке.', time: new Date(Date.now()-1800000).toISOString()}
+      ];
+    }
+
+    function loadState(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState(); }
+      catch { return defaultState(); }
+    }
+    function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function uid(p='id'){ return p + '_' + Math.random().toString(36).slice(2,9) + Date.now().toString(36); }
+    function toDateStr(d){ return d.toISOString().slice(0,10); }
+    function fmtDate(d){ return new Date(d).toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'}); }
+    function fmtTime(d){ return new Date(d).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}); }
+    function currentUser(){ return state.users.find(u => u.id === state.currentUserId); }
+
+    function generateSessions(){
+      const sessions = [];
+      const base = new Date();
+      base.setHours(0,0,0,0);
+      const weekDay = base.getDay() || 7;
+      base.setDate(base.getDate() - weekDay + 1);
+      const schedule = [
+        {day:2,hour:10,trainer:'Катя',focus:'Mobility + Run'},
+        {day:3,hour:19,trainer:'Катя',focus:'HYROX Engine'},
+        {day:4,hour:10,trainer:'Катя',focus:'Strength Flow'},
+        {day:6,hour:10,trainer:'Вова',focus:'Power Endurance'}
+      ];
+      for(let w=-2; w<=6; w++){
+        schedule.forEach(s => {
+          const d = new Date(base);
+          d.setDate(base.getDate() + w*7 + s.day - 1);
+          d.setHours(s.hour,0,0,0);
+          sessions.push({id:'s_'+d.getTime(), title:'Athlete Race Session', ...s, workoutStyleId:'hyrox_beginner', datetime:d.toISOString(), maxParticipants:6, attendees:[], cancelled:false});
+        });
+      }
+      return sessions.sort((a,b)=> new Date(a.datetime)-new Date(b.datetime));
+    }
+
+    function ensureCoachUsers(){
+      if(!state.users.some(u=>u.role==='coach' && u.coachName==='Вова')) state.users.push({id:uid('u'), nickname:'Тренер Вова', role:'coach', avatar:11, coachName:'Вова', joinedAt:new Date().toISOString()});
+      if(!state.users.some(u=>u.role==='coach' && u.coachName==='Катя')) state.users.push({id:uid('u'), nickname:'Тренер Катя', role:'coach', avatar:12, coachName:'Катя', joinedAt:new Date().toISOString()});
+      saveState();
+    }
+
+    function avatarSrc(n){ return `avatars/av${n}.${n===20?'png':'PNG'}`; }
+    function avatarHTML(n, alt='avatar'){
+      const safe = Number(n) || 1;
+      return `<img class="avatar-img" src="${avatarSrc(safe)}" alt="${escapeHTML(alt)}" loading="lazy" onerror="this.parentElement.textContent='AR'">`;
+    }
+    function renderAvatarGrid(id){
+      const el = document.getElementById(id);
+      el.innerHTML = AVATAR_NUMS.map(n=>`<button class="avatar-option ${n===tempAvatar?'active':''}" onclick="selectAvatar('${id}',${n})">${avatarHTML(n,'avatar '+n)}</button>`).join('');
+    }
+    function selectAvatar(id,n){ tempAvatar=n; renderAvatarGrid(id); }
+
+    function loginWith(){ showEmailForm(); }
+    function showEmailForm(){ tempAvatar=1; renderAvatarGrid('email-avatar-grid'); openModal('email-form'); }
+    function showGuestForm(){ tempAvatar=1; renderAvatarGrid('guest-avatar-grid'); openModal('guest-form'); }
+    function openModal(id){ document.getElementById(id).classList.add('open'); }
+    function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+    function loginWithEmail(){
+      const nick = document.getElementById('email-nick').value.trim();
+      if(!nick) return toast('Введите никнейм');
+      loginUser(nick, 'athlete', tempAvatar);
+      closeModal('email-form'); enterApp();
+    }
+    function loginAsGuest(){
+      const nick = document.getElementById('guest-nick').value.trim();
+      if(!nick) return toast('Введите никнейм');
+      loginUser(nick, 'guest', tempAvatar);
+      closeModal('guest-form'); enterApp();
+    }
+    function loginAsCoach(who){
+      ensureCoachUsers();
+      const coachName = who === 'vova' ? 'Вова' : 'Катя';
+      const u = state.users.find(x=>x.role==='coach' && x.coachName===coachName);
+      state.currentUserId = u.id; saveState(); enterApp();
+    }
+    function loginUser(nickname, role, avatar){
+      let u = state.users.find(x=>x.nickname.toLowerCase()===nickname.toLowerCase() && x.role===role);
+      if(!u){
+        u = {id:uid('u'), nickname, role, avatar, joinedAt:new Date().toISOString(), achievements:[]};
+        state.users.push(u);
+      }
+      if(role==='athlete') ensureBookFor(u.id);
+      state.currentUserId = u.id; saveState();
+    }
+    function logout(){ state.currentUserId=null; saveState(); document.getElementById('app').classList.add('hidden'); document.getElementById('auth-screen').classList.remove('hidden'); }
+
+    function enterApp(){
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      renderShell(); navigateTo('schedule');
+      if (window.matchMedia('(max-width: 980px)').matches) {
+        setTimeout(openMobileMenu, 180);
+      }
+    }
+
+    function navItems(){
+      const u = currentUser();
+      const base = [{id:'schedule',label:'Расписание',icon:'⌁'},{id:'chat',label:'Чат',icon:'✉'}];
+      if(u?.role==='coach') return [...base,{id:'coach',label:'Дашборд',icon:'◇'},{id:'book',label:'Книжка',icon:'▤'},{id:'profile',label:'Профиль',icon:'●'}];
+      return [...base,{id:'leaderboard',label:'Рейтинг',icon:'★'},{id:'events',label:'События',icon:'✦'},{id:'profile',label:'Профиль',icon:'●'}];
+    }
+    function renderShell(){
+      const u = currentUser();
+      document.getElementById('user-mini').innerHTML = `
+        <div class="user-avatar">${avatarLabel(u)}</div>
+        <div><strong>${u.nickname}</strong><span>${roleLabel(u.role)}</span></div>`;
+      const navHtml = navItems().map(i=>`<button class="nav-link ${state.currentPage===i.id?'active':''}" onclick="navigateTo('${i.id}')"><span>${i.icon}</span>${i.label}</button>`).join('');
+      document.getElementById('side-nav').innerHTML = navHtml;
+      const mobileMini = document.getElementById('mobile-user-mini');
+      if (mobileMini) mobileMini.innerHTML = document.getElementById('user-mini').innerHTML;
+      const mobileDrawerNav = document.getElementById('mobile-drawer-nav');
+      if (mobileDrawerNav) mobileDrawerNav.innerHTML = navItems().map(i=>`<button class="nav-link ${state.currentPage===i.id?'active':''}" onclick="navigateTo('${i.id}'); closeMobileMenu();"><span>${i.icon}</span>${i.label}</button>`).join('');
+      const bottomNav = document.getElementById('mobile-bottom-nav');
+      if (bottomNav) bottomNav.innerHTML = navItems().map(i=>`<button class="bottom-nav-item ${state.currentPage===i.id?'active':''}" onclick="navigateTo('${i.id}')"><span>${i.icon}</span><em>${i.label}</em></button>`).join('');
+    }
+    function navigateTo(page){
+      state.currentPage=page; saveState();
+      ['schedule','chat','leaderboard','events','profile','coach','book'].forEach(p=>document.getElementById('page-'+p)?.classList.toggle('hidden',p!==page));
+      document.getElementById('mobile-title').textContent = navItems().find(i=>i.id===page)?.label || 'Athlete Race';
+      renderShell();
+      if(page==='schedule') renderSchedule();
+      if(page==='chat') renderChat();
+      if(page==='leaderboard') renderLeaderboard();
+      if(page==='events') renderEvents();
+      if(page==='profile') renderProfile();
+      if(page==='coach') renderCoach();
+      if(page==='book') renderBook();
+      animatePage('page-'+page);
+    }
+
+    function avatarLabel(u){ return avatarHTML(u?.avatar || 1, u?.nickname || 'avatar'); }
+    function roleLabel(r){ return {athlete:'Атлет',guest:'Гость',coach:'Тренер'}[r] || r; }
+    function athleteUsers(){ return state.users.filter(u=>u.role==='athlete'); }
+    function ensureBookFor(uid){
+      if(!state.athleteBook[uid]) state.athleteBook[uid] = DEFAULT_EXERCISES.map(x=>({...x}));
+    }
+
+    function renderSchedule(){
+      const el = document.getElementById('page-schedule');
+      const now = new Date();
+      const today = toDateStr(now);
+      const days = [];
+      for(let i=-3; i<=14; i++){ const d=new Date(); d.setDate(d.getDate()+i); days.push(d); }
+      const daysWith = new Set(state.sessions.filter(s=>!s.cancelled).map(s=>toDateStr(new Date(s.datetime))));
+      const sessions = state.sessions.filter(s=>toDateStr(new Date(s.datetime))===state.selectedDay);
+      el.innerHTML = `
+        <div class="page-hero">
+          <p class="eyebrow">Training calendar</p>
+          <h1>Расписание</h1>
+          <p>Выбирай дату, записывайся на тренировку и смотри, кто идет вместе с тобой.</p>
+        </div>
+        <div class="calendar-strip glass-card">${days.map(d=>{
+          const ds=toDateStr(d); return `<button class="day-pill ${ds===state.selectedDay?'active':''} ${ds===today?'today':''}" onclick="state.selectedDay='${ds}';saveState();renderSchedule()"><span>${d.toLocaleDateString('ru-RU',{weekday:'short'})}</span><strong>${d.getDate()}</strong><i class="${daysWith.has(ds)?'on':''}"></i></button>`
+        }).join('')}</div>
+        <div class="sessions-grid">${sessions.length ? sessions.map(renderSession).join('') : `<div class="empty glass-card"><b>Rest day</b><span>На эту дату тренировок нет.</span></div>`}</div>`;
+    }
+
+    function renderSession(s){
+      const u=currentUser();
+      const d=new Date(s.datetime);
+      const past = d < new Date();
+      const joined = s.attendees.includes(u.id);
+      const full = s.attendees.length >= s.maxParticipants;
+      const attendees = s.attendees.map(id=>state.users.find(u=>u.id===id)).filter(Boolean);
+      const style = getWorkoutStyle(s.workoutStyleId);
+      let action = '';
+      if(u.role==='coach') action = `<div class="coach-session-actions"><button class="btn-primary compact" onclick="openWorkoutStylePicker('${s.id}')">Выбрать стиль</button><button class="btn-ghost" onclick="cancelSession('${s.id}')">Отменить</button></div>`;
+      else if(u.role==='guest') action = `<button class="btn-ghost" onclick="toast('Гость может писать в чат, но запись доступна после входа как атлет')">Гостевой режим</button>`;
+      else if(past) action = `<button class="btn-ghost" disabled>Занятие прошло</button>`;
+      else if(joined) action = `<button class="btn-ghost" onclick="leaveSession('${s.id}')">Не смогу</button>`;
+      else if(full) action = `<button class="btn-ghost" disabled>Мест нет</button>`;
+      else action = `<button class="btn-primary compact" onclick="joinSession('${s.id}')">Записаться</button>`;
+      return `<article class="session-card glass-card ${s.cancelled?'muted':''}">
+        <div class="session-art workout-${style.level}"><div class="art-ring"></div><span>${style.accent}</span></div>
+        <div class="session-info">
+          <div class="session-meta"><span>${fmtDate(s.datetime)} · ${fmtTime(s.datetime)}</span><b>${s.trainer}</b></div>
+          <div class="session-style"><span>${style.tag}</span>${style.title}</div>
+          <h3>${s.title}</h3>
+          <p>${style.focus} · ${s.maxParticipants - s.attendees.length}/${s.maxParticipants} мест свободно</p>
+          <div class="attendee-row">${attendees.map(a=>`<span title="${a.nickname}">${avatarLabel(a)}</span>`).join('')}<em>${attendees.length ? attendees.length+' записано' : 'Пока никто не записался'}</em></div>
+        </div>
+        <div class="session-action">${action}</div>
+      </article>`;
+    }
+    function joinSession(id){ const s=state.sessions.find(s=>s.id===id), u=currentUser(); if(!s||!u) return; if(!s.attendees.includes(u.id)){s.attendees.push(u.id); ensureBookFor(u.id); saveState(); toast('Вы записаны'); renderSchedule();} }
+    function leaveSession(id){ const s=state.sessions.find(s=>s.id===id), u=currentUser(); if(!s||!u) return; s.attendees=s.attendees.filter(x=>x!==u.id); saveState(); toast('Запись отменена'); renderSchedule(); }
+    function cancelSession(id){ const s=state.sessions.find(s=>s.id===id); if(s){s.cancelled=true; saveState(); toast('Тренировка отменена'); renderSchedule();} }
+
+    function getWorkoutStyle(id){ return WORKOUT_STYLES.find(w=>w.id===id) || WORKOUT_STYLES[0]; }
+    function openWorkoutStylePicker(sessionId){
+      const sess = state.sessions.find(s=>s.id===sessionId);
+      tempWorkoutSessionId = sessionId;
+      tempWorkoutStyleId = sess?.workoutStyleId || WORKOUT_STYLES[0].id;
+      renderWorkoutStyleGrid();
+      openModal('workout-style-form');
+    }
+    function renderWorkoutStyleGrid(){
+      const el = document.getElementById('workout-style-grid');
+      el.innerHTML = WORKOUT_STYLES.map(w=>`<button class="style-option-card ${w.id===tempWorkoutStyleId?'active':''}" onclick="selectWorkoutStyle('${w.id}')">
+        <span>${w.tag}</span><b>${w.title}</b><p>${w.focus}</p><small>${w.exercises.map(ex=>ex.name).join(' · ')}</small>
+      </button>`).join('');
+    }
+    function selectWorkoutStyle(id){ tempWorkoutStyleId=id; renderWorkoutStyleGrid(); }
+    function saveWorkoutStyle(){
+      const sess = state.sessions.find(s=>s.id===tempWorkoutSessionId);
+      if(sess){ sess.workoutStyleId = tempWorkoutStyleId; sess.focus = getWorkoutStyle(tempWorkoutStyleId).focus; saveState(); toast('Стиль тренировки обновлен'); }
+      closeModal('workout-style-form');
+      renderSchedule();
+    }
+
+    function renderChat(){
+      const u=currentUser();
+      const el=document.getElementById('page-chat');
+      el.innerHTML = `<div class="page-hero"><p class="eyebrow">Club communication</p><h1>Чат</h1><p>Общий чат для атлетов, гостей и тренеров. История хранится локально в приложении.</p></div>
+      <div class="chat-layout glass-card">
+        <div id="chat-messages" class="chat-messages">${state.chat.map(renderMessage).join('')}</div>
+        <div class="chat-compose">
+          <input id="chat-input" placeholder="Напишите сообщение…" onkeydown="if(event.key==='Enter') sendMessage()" />
+          <button class="btn-primary compact" onclick="sendMessage()">Отправить</button>
+        </div>
+      </div>`;
+      setTimeout(()=>{ const m=document.getElementById('chat-messages'); if(m) m.scrollTop=m.scrollHeight; },20);
+    }
+    function renderMessage(m){ const mine = currentUser()?.nickname === m.userName; return `<div class="msg ${mine?'mine':''}"><div class="msg-head"><b>${m.userName}</b><span>${roleLabel(m.role)} · ${fmtTime(m.time)}</span></div><p>${escapeHTML(m.text)}</p></div>`; }
+    function sendMessage(){
+      const inp=document.getElementById('chat-input'); const text=inp.value.trim(); const u=currentUser();
+      if(!text) return; state.chat.push({id:uid('m'),userName:u.nickname,role:u.role,text,time:new Date().toISOString()});
+      inp.value=''; saveState(); renderChat();
+    }
+
+    function renderLeaderboard(){
+      const users = athleteUsers().sort((a,b)=>attendanceCount(b.id)-attendanceCount(a.id));
+      document.getElementById('page-leaderboard').innerHTML = `<div class="page-hero"><p class="eyebrow">Performance board</p><h1>Рейтинг</h1><p>Лидерборд по посещенным тренировкам.</p></div>
+      <div class="list-stack">${users.length ? users.map((u,i)=>`<div class="rank-card glass-card"><strong>${i+1}</strong><span>${avatarLabel(u)}</span><div><b>${u.nickname}</b><p>${attendanceCount(u.id)} тренировок</p></div></div>`).join('') : '<div class="empty glass-card"><b>Нет атлетов</b><span>Первые участники появятся после входа.</span></div>'}</div>`;
+    }
+    function attendanceCount(id){ return state.sessions.filter(s=>s.attendees.includes(id) && new Date(s.datetime)<new Date()).length + state.sessions.filter(s=>s.attendees.includes(id) && new Date(s.datetime)>=new Date()).length; }
+
+    function renderEvents(){
+      const u=currentUser();
+      document.getElementById('page-events').innerHTML = `<div class="page-hero"><p class="eyebrow">Club events</p><h1>События</h1><p>Клубные старты, выезды и специальные тренировки.</p></div>
+      <div class="events-grid">${state.events.map(e=>`<article class="event-card glass-card"><div class="event-type">${e.type}</div><h3>${e.title}</h3><p>${e.desc}</p><div class="event-meta"><span>${fmtDate(e.date)}</span><span>${e.place}</span><span>${e.participants.length} участников</span></div>${u.role==='guest'?'<button class="btn-ghost">Гость</button>':(e.participants.includes(u.id)?`<button class="btn-ghost" onclick="toggleEvent('${e.id}')">Участвую ✓</button>`:`<button class="btn-primary compact" onclick="toggleEvent('${e.id}')">Участвовать</button>`)}</article>`).join('')}</div>`;
+    }
+    function toggleEvent(id){ const e=state.events.find(e=>e.id===id), u=currentUser(); if(!e||!u) return; e.participants = e.participants.includes(u.id) ? e.participants.filter(x=>x!==u.id) : [...e.participants,u.id]; saveState(); renderEvents(); }
+
+    function renderProfile(){
+      const u=currentUser();
+      document.getElementById('page-profile').innerHTML = `<div class="profile-cover glass-card"><div class="profile-avatar-big">${avatarLabel(u)}</div><button class="btn-ghost profile-avatar-btn" onclick="openAvatarPicker()">Изменить аватар</button><p class="eyebrow">${roleLabel(u.role)}</p><h1>${u.nickname}</h1><div class="profile-stats"><div><strong>${attendanceCount(u.id)}</strong><span>тренировок</span></div><div><strong>${u.role==='coach' ? coachedFutureCount(u) : eventCount(u.id)}</strong><span>${u.role==='coach'?'будущих':'событий'}</span></div><div><strong>${state.chat.filter(m=>m.userName===u.nickname).length}</strong><span>сообщений</span></div></div></div>`;
+    }
+    function openAvatarPicker(){ const u=currentUser(); tempAvatar = u.avatar || 1; renderAvatarGrid('profile-avatar-grid'); openModal('avatar-picker-form'); }
+    function saveProfileAvatar(){ const u=currentUser(); if(!u) return; u.avatar=tempAvatar; saveState(); closeModal('avatar-picker-form'); renderProfile(); renderShell(); toast('Аватар обновлен'); }
+    function eventCount(id){ return state.events.filter(e=>e.participants.includes(id)).length; }
+    function coachedFutureCount(u){ return state.sessions.filter(s=>s.trainer===u.coachName && new Date(s.datetime)>new Date() && !s.cancelled).length; }
+
+    function renderCoach(){
+      const u=currentUser();
+      if(!u || u.role!=='coach'){ document.getElementById('page-coach').innerHTML='<div class="empty glass-card"><b>Раздел только для тренеров</b></div>'; return; }
+      const my = state.sessions.filter(s=>s.trainer===u.coachName);
+      const future = my.filter(s=>new Date(s.datetime)>new Date() && !s.cancelled);
+      const students = new Set(my.flatMap(s=>s.attendees));
+      document.getElementById('page-coach').innerHTML = `<div class="page-hero"><p class="eyebrow">Coach dashboard</p><h1>Дашборд</h1><p>Обзор тренировок, учеников и быстрый переход в тренерскую книжку.</p></div>
+      <div class="coach-grid">
+        <button class="coach-tile glass-card" onclick="navigateTo('book')"><span>▤</span><b>Книжка</b><p>Данные атлетов и рабочие веса</p></button>
+        <div class="coach-tile glass-card"><span>◇</span><b>${future.length}</b><p>Предстоящих тренировок</p></div>
+        <div class="coach-tile glass-card"><span>●</span><b>${students.size}</b><p>Уникальных атлетов</p></div>
+        <div class="coach-tile glass-card"><span>✉</span><b>${state.chat.length}</b><p>Сообщений в чате</p></div>
+      </div>
+      <h2 class="section-heading">Ближайшие занятия</h2>
+      <div class="list-stack">${future.slice(0,5).map(renderSession).join('') || '<div class="empty glass-card"><b>Нет занятий</b></div>'}</div>`;
+    }
+
+    function renderBook(){
+      const u=currentUser();
+      if(!u || u.role!=='coach'){ document.getElementById('page-book').innerHTML='<div class="empty glass-card"><b>Тренерская книжка доступна только тренерам</b></div>'; return; }
+      athleteUsers().forEach(a=>ensureBookFor(a.id)); saveState();
+      const athletes=athleteUsers();
+      document.getElementById('page-book').innerHTML = `<div class="page-hero"><p class="eyebrow">Shared coach book</p><h1>Книжка</h1><p>Оба тренера видят одну и ту же базу. Изменение веса у одного тренера сразу сохраняется для второго.</p></div>
+      <div class="book-panel glass-card"><div class="book-head"><span>▤</span><div><b>Данные атлетов</b><p>Нажмите на атлета, затем изменяйте вес через + / −.</p></div></div>${athletes.length ? athletes.map(renderAthleteBookRow).join('') : '<div class="empty"><b>Пока нет атлетов</b><span>Атлет появится после входа через Email.</span></div>'}</div>`;
+    }
+    function renderAthleteBookRow(a){
+      ensureBookFor(a.id);
+      return `<details class="athlete-detail"><summary><span class="user-avatar small">${avatarLabel(a)}</span><b>${a.nickname}</b><em>${attendanceCount(a.id)} тренировок</em></summary><div class="exercise-list">${state.athleteBook[a.id].map((ex,idx)=>`<div class="exercise-row"><div><b>${escapeHTML(ex.name)}</b><span>Рабочий вес</span></div><div class="stepper"><button onclick="changeWeight('${a.id}',${idx},-1)">−</button><strong>${ex.weight}${ex.unit}</strong><button onclick="changeWeight('${a.id}',${idx},1)">+</button></div></div>`).join('')}
+        <div class="add-exercise-row">
+          <input id="ex-name-${a.id}" placeholder="Новое упражнение, например выпады" />
+          <input id="ex-weight-${a.id}" type="number" min="0" step="1" placeholder="Вес, кг" />
+          <button class="btn-primary compact" onclick="addExercise('${a.id}')">Добавить</button>
+        </div>
+      </div></details>`;
+    }
+    function changeWeight(athleteId, idx, delta){ ensureBookFor(athleteId); state.athleteBook[athleteId][idx].weight = Math.max(0, state.athleteBook[athleteId][idx].weight + delta); saveState(); renderBook(); toast('Вес обновлен'); }
+    function addExercise(athleteId){
+      ensureBookFor(athleteId);
+      const nameEl=document.getElementById(`ex-name-${athleteId}`);
+      const weightEl=document.getElementById(`ex-weight-${athleteId}`);
+      const name=(nameEl?.value||'').trim();
+      const weight=Number(weightEl?.value||0);
+      if(!name) return toast('Введите название упражнения');
+      state.athleteBook[athleteId].push({name, weight:Math.max(0, isNaN(weight)?0:weight), unit:'kg'});
+      saveState(); renderBook(); toast('Упражнение добавлено');
+    }
+
+    function openMobileMenu(){
+      document.getElementById('mobile-menu')?.classList.add('open');
+      document.getElementById('mobile-menu-overlay')?.classList.add('open');
+    }
+    function closeMobileMenu(){
+      document.getElementById('mobile-menu')?.classList.remove('open');
+      document.getElementById('mobile-menu-overlay')?.classList.remove('open');
+    }
+    function toggleMobileMenu(){
+      const menu = document.getElementById('mobile-menu');
+      if(menu?.classList.contains('open')) closeMobileMenu(); else openMobileMenu();
+    }
+
+    function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t.timer); t.timer=setTimeout(()=>t.classList.remove('show'),2200); }
+    function escapeHTML(s){ return s.replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+
+    window.addEventListener('storage', (e)=>{ if(e.key===STORAGE_KEY){ state=loadState(); if(!document.getElementById('app').classList.contains('hidden')) navigateTo(state.currentPage || 'schedule'); } });
+
+    ensureCoachUsers();
+    if(state.currentUserId && currentUser()) enterApp();
+  </script>
+</body>
+</html>
