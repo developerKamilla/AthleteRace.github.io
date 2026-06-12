@@ -1,8 +1,0 @@
-{
-  "rules": {
-    "athleteRace": {
-      ".read": true,
-      ".write": true
-    }
-  }
-}
